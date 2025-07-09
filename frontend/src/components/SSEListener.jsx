@@ -7,7 +7,7 @@ const SSEListener = () => {
 
     eventSource.onmessage = (event) => {
       const mensaje = event.data;
-      toast.error(mensaje, {
+      toast.success(mensaje, {
         duration: 6000,
         position: "bottom-right",
       });

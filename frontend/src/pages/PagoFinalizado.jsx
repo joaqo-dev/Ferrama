@@ -41,9 +41,6 @@ function PagoFinalizado() {
         } else if (error.response?.status === 409) {
           setPaymentStatus("processing");
           setDetails(error.response.data);
-          toast.loading(
-            "La transacción está siendo procesada, por favor espere..."
-          );
         } else {
           setPaymentStatus("rejected");
           setDetails(

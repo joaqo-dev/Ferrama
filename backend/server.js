@@ -1,3 +1,5 @@
+// backend/server.js
+
 require("dotenv").config();
 
 const express = require("express");
@@ -26,14 +28,14 @@ const pool = new Pool({
     `);
     client = await pool.connect();
     console.log(" Conectado a la base de datos con éxito.");
-    // Intenta una consulta simple a la tabla, especificando public.
+
     const res = await client.query(
       "SELECT 1 FROM public.transacciones_webpay LIMIT 1"
     );
     console.log(
       " Consulta a public.transacciones_webpay exitosa al inicio del servidor. La tabla es visible."
     );
-    client.release(); // Libera el cliente
+    client.release();
   } catch (err) {
     console.error(
       " ERROR EN LA CONEXIÓN O CONSULTA INICIAL A transacciones_webpay:"
@@ -53,18 +55,20 @@ const pool = new Pool({
 })();
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
 
 const productosRoutes = require("./routes/products");
 const comprasRoutes = require("./routes/compras");
 const webpayRoutes = require("./routes/webpay");
 const eventsModule = require("./routes/events");
 const eventsRoutes = eventsModule.router;
+const sucursalesRoutes = require("./routes/sucursales");
 
 app.use("/api/productos", productosRoutes);
 app.use("/api/compras", comprasRoutes);
 app.use("/api/webpay", webpayRoutes);
 app.use("/events", eventsRoutes);
+app.use("/api/sucursales", sucursalesRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

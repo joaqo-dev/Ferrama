@@ -1,20 +1,39 @@
-function CantidadSelector({ cantidad, setCantidad }) {
+import React from "react";
+
+function CantidadSelector({ cantidad, onCantidadChange, maxStock }) {
+  const handleChange = (e) => {
+    let value = parseInt(e.target.value);
+    if (isNaN(value) || value < 1) {
+      value = 1;
+    }
+    if (maxStock !== undefined && value > maxStock) {
+      value = maxStock;
+    }
+    onCantidadChange(value);
+  };
+
   return (
-    <div className="flex items-center gap-3">
-      <label htmlFor="cantidad" className="whitespace-nowrap">
+    <div>
+      <label
+        htmlFor="cantidad"
+        className="block text-gray-300 text-sm font-bold mb-2"
+      >
         Cantidad:
       </label>
       <input
-        id="cantidad"
         type="number"
-        min={1}
+        id="cantidad"
         className="bg-zinc-700 border border-zinc-600 text-white p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
         value={cantidad}
-        onChange={(e) => {
-          const valor = Math.max(1, Number(e.target.value));
-          setCantidad(valor);
-        }}
+        onChange={handleChange}
+        min="1"
+        required
       />
+      {maxStock !== undefined && (
+        <p className="text-gray-400 text-sm mt-1">
+          Stock disponible: {maxStock}
+        </p>
+      )}
     </div>
   );
 }

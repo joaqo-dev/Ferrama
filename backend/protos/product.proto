@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package product; // Mantén tu paquete como 'product'
+
+service ProductService {
+  rpc CreateProduct (CreateProductRequest) returns (CreateProductResponse);
+  rpc GetProduct (GetProductRequest) returns (Product);
+  rpc GetStock (GetStockRequest) returns (StockResponse);
+  rpc UpdateStock (UpdateStockRequest) returns (UpdateStockResponse);
+  rpc GetSucursales (Empty) returns (SucursalesResponse);
+  rpc GetProducts (Empty) returns (ProductsResponse);
+}
+
+message Empty {}
+
+message CreateProductRequest {
+  string nombre = 1;
+  string descripcion = 2;
+  int32 stock_inicial = 3;
+  double precio_inicial = 4;
+  string imagen_data = 5; 
+}
+
+message CreateProductResponse {
+  bool success = 1;
+  string message = 2;
+  Product product = 3;
+  string error_code = 5;
+}
+
+message GetProductRequest {
+  int32 product_id = 1;
+}
+
+message GetStockRequest {
+  int32 product_id = 1;
+  int32 sucursal_id = 2;
+}
+
+message StockResponse {
+  bool success = 1;
+  int32 product_id = 2;
+  int32 sucursal_id = 3;
+  int32 stock = 4;
+  double precio = 5;
+  string message = 6;
+}
+
+message UpdateStockRequest {
+  int32 product_id = 1;
+  int32 sucursal_id = 2;
+  int32 quantity_change = 3;
+}
+
+message UpdateStockResponse {
+  bool success = 1;
+  int32 new_stock = 2;
+  string message = 3;
+  string error_message = 4;
+}
+
+message Sucursal {
+  int32 id = 1;
+  string nombre = 2;
+  string ubicacion = 3;
+}
+
+message SucursalesResponse {
+  repeated Sucursal sucursales = 1;
+  string error_message = 2;
+}
+
+message ProductsResponse {
+  repeated Product products = 1;
+  string error_message = 2;
+}
+
+message Product {
+  int32 id = 1;
+  string nombre = 2;
+  string descripcion = 3;
+  string imagen_data = 4;
+}
